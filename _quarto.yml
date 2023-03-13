@@ -9,7 +9,7 @@ project:
   render:
     - index.md
     - setup.md
-    - materials.md
+    - versions.md
     - materials/*
     - "!materials/*/no_render"
 
@@ -40,6 +40,8 @@ book:
     pinned: true
     logo: "_extensions/cambiotraining/courseformat/img/university_crest_reversed.png"
     right:
+      - text: "Archive"
+        href: versions.md
       - icon: github
         href: https://github.com/cambiotraining/
         aria-label: Bioinformatics Training Facility GitHub
@@ -54,4 +56,6 @@ book:
           href: index.md
         - text: "Data & Setup"
           href: setup.md
+        - text: "Archive"
+          href: versions.md
     
