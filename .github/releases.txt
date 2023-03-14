@@ -1,3 +1,4 @@
-# List release versions with latest at the top (line 3 of this file)
-# format is strictly: vYYYY.MM.DD
+# List release versions with latest at the top
+# preferred format is: vYYYY.MM.DD
+v2023.04.26
 v2023.04.25
