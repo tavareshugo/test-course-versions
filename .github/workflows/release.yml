@@ -22,8 +22,7 @@ jobs:
           version: 1.2.112
           
       - name: Add deprecation warning
-        run: ./.github/scripts/release.sh
-        shell: bash
+        run: bash ./.github/scripts/release.sh
 
       - name: Render Site
         uses: quarto-dev/quarto-actions/render@v2
