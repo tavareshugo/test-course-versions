@@ -42,5 +42,5 @@ jobs:
           single-commit: true
           tag: ${{ env.TAG }}
 
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
+      - name: Release
+        uses: softprops/action-gh-release@v1
