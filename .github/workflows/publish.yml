@@ -23,7 +23,7 @@ jobs:
           version: 1.2.112
           
       - name: Add archive appendix
-        run: publish.sh
+        run: ./.github/scripts/publish.sh
         shell: bash
 
       - name: Render Site

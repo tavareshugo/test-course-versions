@@ -22,7 +22,7 @@ jobs:
           version: 1.2.112
           
       - name: Add deprecation warning
-        run: release.sh
+        run: ./.github/scripts/release.sh
         shell: bash
 
       - name: Render Site
