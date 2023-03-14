@@ -22,7 +22,7 @@ while read tag
 do 
   # get remote URL
   url=$(git config --get remote.origin.url | sed 's/.*://' | sed 's/.git$//')
-  url="https://$url/archive/refs/tags/${tag}.zip"
+  url="https:${url}/archive/refs/tags/${tag}.zip"
 
   # create directory
   mkdir -p archive/${tag}
