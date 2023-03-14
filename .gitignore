@@ -1,6 +1,7 @@
 # Quarto files
 /.quarto/
 _site
+.luarc.json
 
 # python notebooks
 *.ipynb

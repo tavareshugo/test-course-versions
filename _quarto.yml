@@ -9,7 +9,6 @@ project:
   render:
     - index.md
     - setup.md
-    - archive/*
     - materials/*
     - "!materials/*/no_render"
 
