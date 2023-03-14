@@ -1,10 +1,9 @@
 on:
   push:
-    branches: 
-      - main
-      - master
+    tags: 
+      - "v*.*.*"
 
-name: Render & Publish Site
+name: New Release
 
 jobs:
   build-deploy:
@@ -22,20 +21,12 @@ jobs:
         with:
           version: 1.2.112
           
-      - name: Add archive appendix
-        run: publish.sh
+      - name: Add deprecation warning
+        run: release.sh
         shell: bash
 
       - name: Render Site
         uses: quarto-dev/quarto-actions/render@v2
 
-      - name: No Jekyll
-        run: |
-          touch _site/.nojekyll
-
-      - name: Publish
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: _site
-          single-commit: true
+      - name: Release
+        uses: softprops/action-gh-release@v1
