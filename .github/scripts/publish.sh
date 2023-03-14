@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # create appendix.md file
 echo "
 ---
@@ -19,8 +21,8 @@ We highly recommend that you refer to the latest version of the materials, howev
 while read tag
 do 
   # get remote URL
-  url=$(git config --get remote.origin.url | sed 's/.*://' | sed 's/.git$//')
-  url=$(echo "https://github.com/$url/archive/refs/tags/${tag}.zip")
+  url=$(git config --get remote.origin.url | sed 's/.*://' | cut -d '/' -f -2 | sed 's/.git$//')
+  url="https://github.com/$url/archive/refs/tags/${tag}.zip"
   
   # create directory
   mkdir -p archive/${tag}
