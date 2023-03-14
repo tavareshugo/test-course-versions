@@ -30,8 +30,8 @@ do
   # download, unzip and move to directory
   wget -O ${tag}.zip $url
   unzip ${tag}.zip
-  mv *-$(echo $tag | sed 's/$v//')/* archive/${tag}/
-  rmdir *-$(echo $tag | sed 's/$v//')
+  mv *-$(echo $tag | sed 's/v//')/* archive/${tag}/
+  rmdir *-$(echo $tag | sed 's/v//')
   
   # add to archive.md file
   date=$(echo $tag | sed 's/v//' | sed 's/\./-/g')
