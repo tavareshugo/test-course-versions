@@ -1,9 +1,9 @@
 on:
   push:
-    tags: 
+    tags:
       - "v*.*.*"
 
-name: Render Release
+name: Release
 
 jobs:
   build-deploy:
@@ -11,34 +11,11 @@ jobs:
     
     env: 
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      TAG: 
     
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          version: 1.2.112
-          
-      - name: Add deprecation warning
-        run: bash ./.github/scripts/release.sh
-
-      - name: Render Site
-        uses: quarto-dev/quarto-actions/render@v2
-        
-      # - name: Publish
-      #   uses: JamesIves/github-pages-deploy-action@v4
-      #   with:
-      #     branch: release
-      #     folder: _site
-      #     single-commit: true
-
-      - name: Clean
-        run: |
-          rm -r $(ls -A | grep -v _site)
-          mv _site/* .
-          rmdir _site
 
       - name: Release
         uses: softprops/action-gh-release@v1

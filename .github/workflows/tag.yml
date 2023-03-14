@@ -1,0 +1,46 @@
+on:
+  push:
+    branches: 
+      - main
+    paths: 
+      - .github/releases.txt
+
+name: Render & Tag
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    
+    env: 
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      TAG: 
+    
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.2.112
+          
+      - name: Add deprecation warning
+        run: bash ./.github/scripts/release.sh
+
+      - name: Render Site
+        uses: quarto-dev/quarto-actions/render@v2
+
+      - name: Set tag variable
+        run: |
+          echo "TAG=$(head -n 3 .github/releases.txt | tail -n 1)" >> $GITHUB_ENV
+      
+      - name: Publish
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: release
+          folder: _site
+          single-commit: true
+          tag: $TAG
+
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
