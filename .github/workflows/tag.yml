@@ -40,7 +40,7 @@ jobs:
           branch: release
           folder: _site
           single-commit: true
-          tag: $TAG
+          tag: ${{ env.TAG }}
 
       # - name: Release
       #   uses: softprops/action-gh-release@v1
