@@ -3,8 +3,10 @@ on:
     branches: 
       - main
       - master
+    paths-ignore:
+      - ".github/**"
 
-name: Render & Publish Site
+name: Publish Site
 
 jobs:
   build-deploy:

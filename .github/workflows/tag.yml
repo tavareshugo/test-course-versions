@@ -5,7 +5,7 @@ on:
     paths: 
       - .github/releases.txt
 
-name: Render & Tag
+name: Tag Latest
 
 jobs:
   build-deploy:
