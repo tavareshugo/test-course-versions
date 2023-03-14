@@ -27,12 +27,18 @@ jobs:
       - name: Render Site
         uses: quarto-dev/quarto-actions/render@v2
         
-      - name: Publish
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: release
-          folder: _site
-          single-commit: true
+      # - name: Publish
+      #   uses: JamesIves/github-pages-deploy-action@v4
+      #   with:
+      #     branch: release
+      #     folder: _site
+      #     single-commit: true
 
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
+      - name: Clean
+        run: |
+          rm -r $(ls -A | grep -v _site)
+          mv _site/* .
+          rmdir _site
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
