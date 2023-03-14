@@ -3,7 +3,7 @@ on:
     tags: 
       - "v*.*.*"
 
-name: New Release
+name: Render Release
 
 jobs:
   build-deploy:
@@ -34,7 +34,5 @@ jobs:
           folder: _site
           single-commit: true
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          target_commitish: release
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
