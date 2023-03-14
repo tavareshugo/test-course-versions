@@ -1,6 +1,6 @@
 #!/bin/bash
 
 echo "
-  appendices: |
+  appendices:
     - text: Archive
       href: archive.md" >> _quarto.yml
