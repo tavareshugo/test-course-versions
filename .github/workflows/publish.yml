@@ -31,7 +31,7 @@ jobs:
         uses: quarto-dev/quarto-actions/render@v2
         
       - name: Move archive to _site
-        run: ls _site; ls; mv archive _site
+        run: ls _site/archive; echo "-----"; ls; mv archive _site
 
       - name: No Jekyll
         run: |
