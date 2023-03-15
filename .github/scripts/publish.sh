@@ -2,6 +2,9 @@
 
 set -e
 
+# token
+ghtoken=$1
+
 # create appendix.md file
 echo "
 ---
@@ -28,16 +31,18 @@ do
   mkdir -p archive/${tag}
   
   # download, unzip and move to directory
+  # slightly convoluted because the zip archive contains a top-level directory which we don't want to keep 
+  mkdir temp
   wget -O ${tag}.zip $url
-  unzip ${tag}.zip
-  mv *-$(echo $tag | sed 's/v//')/* archive/${tag}/
-  rmdir *-$(echo $tag | sed 's/v//')
+  unzip -d temp/ ${tag}.zip
+  mv temp/$(ls temp/) archive/${tag}/
+  rm -r temp ${tag}.zip
   
   # add to archive.md file
   date=$(echo $tag | sed 's/v//' | sed 's/\./-/g')
   echo "* [${date}](archive/${tag}/index.html)" >> archive.md
   
-done < <(grep -v "#" .github/releases.txt | head -n 5 | tail -n 4)
+done < <(grep -v "#" .github/releases.txt | head -n 4)
 
 # add appendix to _quarto.yml
 echo "
