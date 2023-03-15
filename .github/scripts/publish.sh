@@ -35,7 +35,7 @@ do
   mkdir temp
   wget -O ${tag}.zip $url
   unzip -d temp/ ${tag}.zip
-  mv temp/$(ls temp/) archive/${tag}/
+  mv temp/$(ls temp/)/* archive/${tag}/
   rm -r temp ${tag}.zip
   
   # add to archive.md file
