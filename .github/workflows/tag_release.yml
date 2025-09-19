@@ -32,8 +32,8 @@ jobs:
     - name: Prepare archive directory
       run: |
         # Rename _site to the tag name
-        mv _site ${{ steps.tag.tag_name }}
-        echo "Archive directory created: ${{ steps.tag.tag_name }}"
+        mv _site ${{ steps.tag.outputs.tag_name }}
+        echo "Archive directory created: ${{ steps.tag.outputs.tag_name }}"
         
     - name: Checkout gh-pages branch for archive
       uses: actions/checkout@v4
@@ -47,12 +47,12 @@ jobs:
         mkdir -p _site/archive
         
         # Copy the new version into the archive
-        cp -r ${{ steps.tag.tag_name }} _site/archive/
+        cp -r ${{ steps.tag.outputs.tag_name }} _site/archive/
 
         # List contents for verification
         echo "Archive contents:"
-        ls -la gh-pages-checkout/archive/
-        
+        ls -la _site/archive/
+
     - name: Update all versions pages and dropdowns
       run: |
         python .github/scripts/update-dropdown.py
