@@ -57,6 +57,10 @@ jobs:
       run: |
         python .github/scripts/update-dropdown.py
         
+    - name: No Jekyll
+      run: |
+        touch _site/.nojekyll
+        
     - name: Publish
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:

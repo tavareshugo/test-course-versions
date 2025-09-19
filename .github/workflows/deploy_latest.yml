@@ -1,6 +1,11 @@
 name: Deploy Latest Version
 
 on:
+  workflow_run:
+    workflows: ["Create Archive Version"]   # the workflow `name:` value of your archive workflow
+    types:
+      - completed
+  # keep push-to-main as an additional trigger
   push:
     branches:
       - main
@@ -58,6 +63,10 @@ jobs:
     - name: Update dropdowns and versions pages
       run: |
         python .github/scripts/update-dropdown.py
+        
+    - name: No Jekyll
+      run: |
+        touch _site/.nojekyll
         
     - name: Deploy to gh-pages
       uses: JamesIves/github-pages-deploy-action@4.1.0
