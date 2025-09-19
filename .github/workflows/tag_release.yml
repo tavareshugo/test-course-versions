@@ -23,16 +23,12 @@ jobs:
       run: |
         TAG_NAME=${GITHUB_REF#refs/tags/}
         echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
-          
-    - name: Add warning header for archived version
-      run: |
-      cat <<EOF >> _quarto.yml
-    body-header: |
-      :::{.callout-warning}
-      <font size='+2'>This is an archived version of the course - please consider using the [latest version](../../index.html).</font>
-      :::
-    EOF
+        echo "Creating archive for version: $TAG_NAME"
 
+    - name: Add warning header for archived version (heredoc)
+      run: |
+        printf "%s\n" "body-header: |" "  :::{.callout-warning}" "  <font size='+2'>This is an archived version of the course - please consider using the [latest version](../../index.html).</font>" "  :::" >> _quarto.yml
+    
     - name: Render tagged version
       run: |
         quarto render
