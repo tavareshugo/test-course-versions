@@ -10,16 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Wait for tag workflow completion
-      uses: lewagon/wait-on-check-action@v1.3.1
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      with:
-        ref: ${{ github.sha }}
-        check-name: 'create-archive'
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        wait-interval: 30
-        allowed-conclusions: success,skipped
-      continue-on-error: true
+    # - name: Wait for tag workflow completion
+    #   uses: lewagon/wait-on-check-action@v1.3.1
+    #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    #   with:
+    #     ref: ${{ github.sha }}
+    #     check-name: 'create-archive'
+    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+    #     wait-interval: 30
+    #     allowed-conclusions: success,skipped
+    #   continue-on-error: true
     
     - name: Checkout main branch
       uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
         
     - name: Update dropdowns and versions pages
       run: |
-        python ./github/scripts/update-dropdown.py
+        python .github/scripts/update-dropdown.py
         
     - name: Deploy to gh-pages
       uses: JamesIves/github-pages-deploy-action@4.1.0
