@@ -1,7 +1,7 @@
 project:
   type: book
-  resources: 
-    - "archive"
+  # resources: 
+  #   - "archive"
   output-dir: _site
   render:
     - index.md

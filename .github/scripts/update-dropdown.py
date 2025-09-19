@@ -4,7 +4,6 @@ Post-render script to inject version dropdown and archive versions into Quarto-g
 Designed for Cambridge Informatics Training course materials with versioning.
 """
 
-import os
 import re
 import glob
 from pathlib import Path
@@ -41,11 +40,8 @@ def generate_dropdown_html(versions):
     Returns:
         HTML string for the dropdown
     """
-    if not versions:
-        return ""
-
     # Show "Latest" + up to 3 most recent versions + "More versions..."
-    display_versions = versions[:3]
+    display_versions = versions[:3] if versions else []
     has_more = len(versions) > 3
 
     dropdown_html = """
@@ -60,7 +56,7 @@ def generate_dropdown_html(versions):
         </a>
       </li>"""
 
-    # Add recent versions
+    # Add recent versions if any
     for version in display_versions:
         dropdown_html += f"""
       <li>
@@ -202,12 +198,6 @@ def main():
     # Get available versions
     versions = get_available_versions()
     print(f"📁 Found {len(versions)} archived versions: {versions}")
-
-    if not versions:
-        print(
-            "ℹ️  No archived versions found. Skipping dropdown injection and versions update."
-        )
-        return
 
     # Generate dropdown HTML
     dropdown_html = generate_dropdown_html(versions)
