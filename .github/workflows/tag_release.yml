@@ -65,5 +65,5 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
         branch: gh-pages
-        folder: gh-pages-checkout
+        folder: _site
         single-commit: true
