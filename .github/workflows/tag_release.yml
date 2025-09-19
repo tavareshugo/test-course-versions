@@ -27,7 +27,7 @@ jobs:
 
     - name: Add warning header for archived version (heredoc)
       run: |
-        printf "%s\n" "body-header: |" "  :::{.callout-warning}" "  <font size='+2'>This is an archived version of the course - please consider using the [latest version](../../index.html).</font>" "  :::" >> _quarto.yml
+        printf "%s\n" "" "  body-header: |" "    :::{.callout-warning}" "    <font size='+2'>This is an archived version of the course - please consider using the [latest version](../../index.html).</font>" "    :::" >> _quarto.yml
     
     - name: Render tagged version
       run: |
