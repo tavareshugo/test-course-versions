@@ -3,7 +3,6 @@ project:
   resources: 
     - "archive"
   output-dir: _site
-  post-render: update-dropdown.py
   render:
     - index.md
     - setup.md

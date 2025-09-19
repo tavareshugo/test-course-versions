@@ -1,0 +1,67 @@
+name: Deploy Latest Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-main:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Wait for tag workflow completion
+      uses: lewagon/wait-on-check-action@v1.3.1
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      with:
+        ref: ${{ github.sha }}
+        check-name: 'create-archive'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 30
+        allowed-conclusions: success,skipped
+      continue-on-error: true
+    
+    - name: Checkout main branch
+      uses: actions/checkout@v4
+      with:
+        ref: main
+    
+    - name: Setup Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+    
+    - name: Render main branch
+      run: |
+        quarto render
+    
+    - name: Checkout existing archive from gh-pages
+      uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        path: gh-pages-archive
+        sparse-checkout: |
+          archive
+        sparse-checkout-cone-mode: false
+      continue-on-error: true
+        
+    - name: Copy archive to _site
+      run: |
+        # Copy existing archive if it exists
+        if [ -d "gh-pages-archive/archive" ]; then
+          cp -r gh-pages-archive/archive _site/
+          echo "Copied existing archive to _site"
+          ls -la _site/archive/
+        else
+          echo "No existing archive found - this may be the first deployment"
+          mkdir -p _site/archive
+        fi
+        
+    - name: Update dropdowns and versions pages
+      run: |
+        python ./github/scripts/update-dropdown.py
+        
+    - name: Deploy to gh-pages
+      uses: JamesIves/github-pages-deploy-action@4.1.0
+      with:
+        branch: gh-pages
+        folder: _site
+        single-commit: true
