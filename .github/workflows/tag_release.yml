@@ -52,14 +52,6 @@ jobs:
         # List contents for verification
         echo "Archive contents:"
         ls -la _site/archive/
-
-    - name: Update all versions pages and dropdowns
-      run: |
-        python .github/scripts/update-dropdown.py ${{ github.event.repository.name }}
-        
-    - name: No Jekyll
-      run: |
-        touch _site/.nojekyll
         
     - name: Publish
       uses: JamesIves/github-pages-deploy-action@4.1.0
