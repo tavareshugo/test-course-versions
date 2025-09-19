@@ -1,3 +1,4 @@
+archive/*
 # Quarto files
 /.quarto/
 _site
@@ -22,3 +23,5 @@ _site
 # Jupyter cache
 .jupyter_cache
 /.luarc.json
+
+**/*.quarto_ipynb
