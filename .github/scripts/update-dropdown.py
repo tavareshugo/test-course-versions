@@ -83,7 +83,7 @@ def generate_dropdown_html(versions, prefix):
     return dropdown_html
 
 
-def generate_archive_versions_html(versions):
+def generate_archive_versions_html(versions, prefix):
     """
     Generate HTML for archive versions to be injected into versions.html files.
 
@@ -209,10 +209,10 @@ def main():
     print(f"📁 Found {len(versions)} archived versions: {versions}")
 
     # Generate dropdown HTML
-    dropdown_html = generate_dropdown_html(versions)
+    dropdown_html = generate_dropdown_html(versions, prefix)
 
     # Generate archive versions HTML
-    archive_html = generate_archive_versions_html(versions)
+    archive_html = generate_archive_versions_html(versions, prefix)
 
     # Find all HTML files to update
     html_files = glob.glob("_site/**/*.html", recursive=True)
