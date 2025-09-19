@@ -8,6 +8,7 @@ import re
 import glob
 from pathlib import Path
 from datetime import datetime
+import sys
 
 
 def get_available_versions():
@@ -30,7 +31,7 @@ def get_available_versions():
     return versions
 
 
-def generate_dropdown_html(versions):
+def generate_dropdown_html(versions, prefix):
     """
     Generate the HTML for the version dropdown.
 
@@ -44,14 +45,14 @@ def generate_dropdown_html(versions):
     display_versions = versions[:3] if versions else []
     has_more = len(versions) > 3
 
-    dropdown_html = """
+    dropdown_html = f"""
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-versions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
       <span class="menu-text">Versions</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-versions">
       <li>
-        <a class="dropdown-item" href="/">
+        <a class="dropdown-item" href="/{prefix}/index.html">
           <span class="dropdown-text">Latest</span>
         </a>
       </li>"""
@@ -60,17 +61,17 @@ def generate_dropdown_html(versions):
     for version in display_versions:
         dropdown_html += f"""
       <li>
-        <a class="dropdown-item" href="/archive/{version}/index.html">
+        <a class="dropdown-item" href="/{prefix}/archive/{version}/index.html">
           <span class="dropdown-text">{version}</span>
         </a>
       </li>"""
 
     # Add "More versions..." if needed
     if has_more:
-        dropdown_html += """
+        dropdown_html += f"""
       <li><hr class="dropdown-divider"></li>
       <li>
-        <a class="dropdown-item" href="/versions.html">
+        <a class="dropdown-item" href="/{prefix}/versions.html">
           <span class="dropdown-text">More versions...</span>
         </a>
       </li>"""
@@ -112,7 +113,7 @@ def generate_archive_versions_html(versions):
 <h5 class="mb-1 anchored">Version {version}</h5>
 <p><small class="text-muted">{formatted_date}</small></p>
 </div>
-<p><a href="/archive/{version}/index.html">View Version {version}</a></p>
+<p><a href="/{prefix}/archive/{version}/index.html">View Version {version}</a></p>
 </div>"""
 
     return archive_html
@@ -193,6 +194,14 @@ def main():
     """
     Main function to update all HTML files with version dropdowns and archive versions.
     """
+
+    # read user input prefix
+    if len(sys.argv) > 1:
+        prefix = sys.argv[1]
+    else:
+        print("❗ Error: No prefix argument provided.")
+        sys.exit(1)
+
     print("🔄 Post-render: Starting dropdown injection and versions update...")
 
     # Get available versions

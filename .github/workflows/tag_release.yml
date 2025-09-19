@@ -55,7 +55,7 @@ jobs:
 
     - name: Update all versions pages and dropdowns
       run: |
-        python .github/scripts/update-dropdown.py
+        python .github/scripts/update-dropdown.py ${{ github.repository }}
         
     - name: No Jekyll
       run: |
