@@ -7,7 +7,6 @@ on:
 
 jobs:
   call-deploy:
-    needs: call-archive
     uses: tavareshugo/test-gh-actions/.github/workflows/deploy-book.yml@main
     with:
       pre_render: "echo 'Optional pre-render commands'"
