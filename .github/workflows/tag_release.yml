@@ -24,10 +24,6 @@ jobs:
         TAG_NAME=${GITHUB_REF#refs/tags/}
         echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
         echo "Creating archive for version: $TAG_NAME"
-
-    - name: Add warning header for archived version (heredoc)
-      run: |
-        printf "%s\n" "" "  body-header: |" "    :::{.callout-warning}" "    <font size='+2'>This is an archived version of the course - please consider using the [latest version](../../index.html).</font>" "    :::" >> _quarto.yml
     
     - name: Render tagged version
       run: |
