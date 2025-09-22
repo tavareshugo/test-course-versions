@@ -5,17 +5,10 @@ on:
     branches:
       - main
 
-  workflow_run:
-    workflows: ["Tag Release"]
-    types:
-      - completed
-
 jobs:
-  call-deploy-latest:
-    if: >
-      github.event_name != 'workflow_run' ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
-    uses: tavareshugo/test-gh-actions/.github/workflows/deploy_latest.yml@main
+  call-deploy:
+    needs: call-archive
+    uses: tavareshugo/test-gh-actions/deploy@main
     with:
       pre_render: "echo 'Optional pre-render commands'"
       post_render: "echo 'Optional post-render commands'"
