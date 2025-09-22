@@ -130,7 +130,7 @@ def inject_dropdown_into_html(file_path, dropdown_html):
 
         # Remove any existing version dropdown
         content = re.sub(
-            r'<li class="nav-item dropdown">\s*<a class="nav-link dropdown-toggle"[^>]*id="nav-menu-versions".*?</li>',
+            r'<li class="nav-item dropdown">.*?</ul>\s*</li>',
             "",
             content,
             flags=re.DOTALL,
@@ -190,6 +190,51 @@ def inject_archive_versions_into_versions_html(file_path, archive_html):
         return False
 
 
+def inject_deprecation_warning(file_path, prefix):
+    """
+    Inject a deprecation warning banner at the top of the HTML file.
+    """
+    warning_html = f"""
+<div id="deprecation-warning" class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><font size="+2">This is an archived version of the course - please consider using the <a href="/{prefix}/index.html">latest version</a>.</font></p>
+</div>
+</div>
+"""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Skip if warning already present
+        if 'id="deprecation-warning"' in content:
+            return True
+
+        # Inject warning right after the main content tag
+        content = re.sub(
+            r"(<main class=\"content\" id=\"quarto-document-content\">)",
+            r"\1" + warning_html,
+            content,
+            count=1,
+        )
+
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(content)
+
+        return True
+
+    except Exception as e:
+        print(f"✗ Error injecting warning in {file_path}: {e}")
+        return False
+
+
 def main():
     """
     Main function to update all HTML files with version dropdowns and archive versions.
@@ -232,11 +277,22 @@ def main():
                 versions_success_count += 1
                 print(f"✓ Updated archive versions in: {html_file}")
 
+    # find all archive HTML files to update with warning
+    archive_html_files = glob.glob("_site/archive/**/*.html", recursive=True)
+    warning_successs_count = 0
+
+    for archive_file in archive_html_files:
+        if inject_deprecation_warning(archive_file, prefix):
+            warning_successs_count += 1
+
     print(
         f"🎉 Successfully updated {dropdown_success_count}/{len(html_files)} HTML files with version dropdown!"
     )
     print(
         f"🎉 Successfully updated {versions_success_count} versions.html files with archive versions!"
+    )
+    print(
+        f"🎉 Successfully updated {warning_successs_count}/{len(archive_html_files)} archive HTML files with deprecation warning!"
     )
 
 
