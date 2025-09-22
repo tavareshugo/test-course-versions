@@ -7,7 +7,7 @@ on:
 
 jobs:
   call-tag-release:
-    uses: tavareshugo/test-gh-actions/blob/main/.github/workflows/tag_release.yml@main
+    uses: tavareshugo/test-gh-actions/.github/workflows/tag_release.yml@main
     with:
       pre_render: "echo 'Pre-render hook for additional setup'"
       post_render: "echo 'Post-render hook for custom commands'"
