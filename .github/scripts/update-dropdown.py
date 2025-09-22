@@ -31,24 +31,27 @@ def get_available_versions():
     return versions
 
 
-def generate_dropdown_html(versions, prefix):
+def generate_dropdown_html(versions, prefix, current_version=None):
     """
     Generate the HTML for the version dropdown.
-
-    Args:
-        versions: List of available versions
-
-    Returns:
-        HTML string for the dropdown
+    If current_version is provided (e.g. 'Latest' or '2025.01.15'),
+    a small badge showing the current version will be appended to the label.
     """
-    # Show "Latest" + up to 3 most recent versions + "More versions..."
     display_versions = versions[:3] if versions else []
     has_more = len(versions) > 3
 
+    # Prepare badge HTML (small, aria-hidden so screen-readers read the menu label itself)
+    badge_html = ""
+    if current_version:
+        # escape current_version if necessary (here it's safe)
+        badge_html = (
+            f' <span class="version-badge" aria-hidden="true">{current_version}</span>'
+        )
+
     dropdown_html = f"""
-  <li class="nav-item dropdown">
+  <li id="version-dropdown" class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-versions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
-      <span class="menu-text">Versions</span>
+      <span class="menu-text">Version:</span>{badge_html}
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-versions">
       <li>
@@ -57,7 +60,6 @@ def generate_dropdown_html(versions, prefix):
         </a>
       </li>"""
 
-    # Add recent versions if any
     for version in display_versions:
         dropdown_html += f"""
       <li>
@@ -66,7 +68,6 @@ def generate_dropdown_html(versions, prefix):
         </a>
       </li>"""
 
-    # Add "More versions..." if needed
     if has_more:
         dropdown_html += f"""
       <li><hr class="dropdown-divider"></li>
@@ -81,6 +82,17 @@ def generate_dropdown_html(versions, prefix):
   </li>"""
 
     return dropdown_html
+
+
+def detect_current_version_from_path(file_path):
+    """
+    Return 'Latest' or 'YYYY.MM.DD' based on the file path.
+    """
+    p = Path(file_path).as_posix()
+    m = re.search(r"/archive/(\d{4}\.\d{2}\.\d{2})(?:/|$)", p)
+    if m:
+        return m.group(1)
+    return "Latest"
 
 
 def generate_archive_versions_html(versions, prefix):
@@ -121,37 +133,41 @@ def generate_archive_versions_html(versions, prefix):
 
 def inject_dropdown_into_html(file_path, dropdown_html):
     """
-    Inject the dropdown HTML into a specific HTML file.
-    Inserts the dropdown as the first item in the right-aligned navbar section.
+    Inject the provided dropdown_html immediately before the closing </nav> tag.
+    Raises an exception if </nav> is not found.
+
+    Returns True on success.
     """
+    # Add some CSS to remove bullet points from the dropdown list
+    marker_css = """
+    <style>
+    #version-dropdown {
+      list-style: none;
+    }
+    </style>
+    """
+    dropdown_html = marker_css + "\n" + dropdown_html
+
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         # Remove any existing version dropdown
         content = re.sub(
-            r'<li class="nav-item dropdown">.*?</ul>\s*</li>',
+            r'<li id="version-dropdown" class="nav-item dropdown">.*?</ul>\s*</li>',
             "",
             content,
-            flags=re.DOTALL,
+            flags=re.DOTALL | re.IGNORECASE,
         )
 
-        # Look for the right-aligned navbar section and inject dropdown at the beginning
-        navbar_pattern = r'(<ul class="navbar-nav navbar-nav-scroll ms-auto">\s*)'
-
-        if re.search(navbar_pattern, content):
-            # Insert dropdown right after the opening ul tag
-            content = re.sub(
-                navbar_pattern, r"\1" + dropdown_html + "\n", content, count=1
-            )
-
+        # Inject directly before the last </nav>
+        if "</nav>" in content:
+            content = content.replace("</nav>", dropdown_html + "\n</nav>", 1)
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
-
             return True
         else:
-            print(f"⚠ Could not find navbar pattern in: {file_path}")
-            return False
+            raise RuntimeError(f"⚠ Could not find closing </nav> tag in: {file_path}")
 
     except Exception as e:
         print(f"✗ Error updating {file_path}: {e}")
@@ -267,11 +283,14 @@ def main():
     versions_success_count = 0
 
     for html_file in html_files:
-        # Inject dropdown into all files
+        current_version = detect_current_version_from_path(html_file)
+        dropdown_html = generate_dropdown_html(
+            versions, prefix, current_version=current_version
+        )
+
         if inject_dropdown_into_html(html_file, dropdown_html):
             dropdown_success_count += 1
 
-        # If this is a versions.html file, also inject archive versions
         if html_file.endswith("versions.html"):
             if inject_archive_versions_into_versions_html(html_file, archive_html):
                 versions_success_count += 1
