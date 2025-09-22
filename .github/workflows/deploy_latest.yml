@@ -16,3 +16,10 @@ jobs:
         post_render: "echo 'Optional post-render commands'"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Deploy to gh-pages
+      uses: JamesIves/github-pages-deploy-action@4.1.0
+      with:
+        branch: gh-pages
+        folder: _site
+        single-commit: true
