@@ -1,79 +1,21 @@
-name: Deploy Latest Version
+name: Deploy Latest
 
 on:
-  workflow_run:
-    workflows: ["Create Archive Version"]   # the workflow `name:` value of your archive workflow
-    types:
-      - completed
-  # keep push-to-main as an additional trigger
   push:
     branches:
       - main
 
+  workflow_run:
+    workflows: ["Tag Release"]
+    types:
+      - completed
+
 jobs:
-  deploy-main:
+  call-deploy-latest:
     if: >
       github.event_name != 'workflow_run' ||
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
-    runs-on: ubuntu-latest
-    
-    steps:
-    # - name: Wait for tag workflow completion
-    #   uses: lewagon/wait-on-check-action@v1.3.1
-    #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    #   with:
-    #     ref: ${{ github.sha }}
-    #     check-name: 'create-archive'
-    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
-    #     wait-interval: 30
-    #     allowed-conclusions: success,skipped
-    #   continue-on-error: true
-    
-    - name: Checkout main branch
-      uses: actions/checkout@v4
-      with:
-        ref: main
-    
-    - name: Setup Quarto
-      uses: quarto-dev/quarto-actions/setup@v2
-    
-    - name: Render main branch
-      run: |
-        quarto render
-    
-    - name: Checkout existing archive from gh-pages
-      uses: actions/checkout@v4
-      with:
-        ref: gh-pages
-        path: gh-pages-archive
-        sparse-checkout: |
-          archive
-        sparse-checkout-cone-mode: false
-      continue-on-error: true
-        
-    - name: Copy archive to _site
-      run: |
-        # Copy existing archive if it exists
-        if [ -d "gh-pages-archive/archive" ]; then
-          cp -r gh-pages-archive/archive _site/
-          echo "Copied existing archive to _site"
-          ls -la _site/archive/
-        else
-          echo "No existing archive found - this may be the first deployment"
-          mkdir -p _site/archive
-        fi
-        
-    - name: Update dropdowns and versions pages
-      run: |
-        python .github/scripts/update-dropdown.py ${{ github.event.repository.name }}
-        
-    - name: No Jekyll
-      run: |
-        touch _site/.nojekyll
-        
-    - name: Deploy to gh-pages
-      uses: JamesIves/github-pages-deploy-action@4.1.0
-      with:
-        branch: gh-pages
-        folder: _site
-        single-commit: true
+    uses: tavareshugo/test-gh-actions/blob/main/.github/workflows/deploy_latest.yml@main
+    with:
+      pre_render: "echo 'Optional pre-render commands'"
+      post_render: "echo 'Optional post-render commands'"
