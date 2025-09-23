@@ -9,7 +9,7 @@ number-sections: false
 
 Include a one-paragraph summary of the course here. 
 
-## Tag: 2024-06-01
+## Latest
 
 Test course versioning - new deploy
 
