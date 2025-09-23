@@ -11,7 +11,7 @@ project:
     - "!materials/*/no_render"
     - "!archive"
 
-format: courseformat-html
+format: crit-format-html
 
 execute:
   freeze: auto
@@ -27,7 +27,7 @@ metadata-files:
 book:
   search:
     location: sidebar
-  favicon: "_extensions/cambiotraining/courseformat/img/university-of-cambridge-favicon.ico"
+  favicon: "_extensions/tavareshugo/crit-format/img/university-of-cambridge-favicon.ico"
   page-navigation: true
   page-footer: 
     center: |
@@ -36,7 +36,7 @@ book:
       Cambridge Research Informatics Training
   navbar:
     pinned: true
-    logo: "_extensions/cambiotraining/courseformat/img/university_crest_reversed.png"
+    logo: "_extensions/tavareshugo/crit-format/img/university_crest_reversed.png"
     right:
       - text: "{{< iconify fa6-brands github size=lg title='CRIT GitHub' >}}"
         href: https://github.com/cambiotraining/
