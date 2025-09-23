@@ -11,7 +11,7 @@ Include a one-paragraph summary of the course here.
 
 ## Tag: 2024-01-01
 
-Test course versioning.
+Test course versioning - new deploy
 
 ::: {.callout-tip}
 ### Learning Objectives
