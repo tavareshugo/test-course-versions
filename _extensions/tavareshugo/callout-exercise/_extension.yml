@@ -1,0 +1,8 @@
+title: Course Page Format
+author: Cambridge Research Informatics Training
+version: 1.0.0
+contributes:
+  shortcodes:
+    - star_levels.lua
+  filters:
+    - callout_exercise.lua

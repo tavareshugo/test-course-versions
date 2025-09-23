@@ -1,0 +1,6 @@
+title: Course Page Format
+author: Cambridge Research Informatics Training
+version: 1.0.0
+contributes:
+  shortcodes:
+    - citation_cff.lua
