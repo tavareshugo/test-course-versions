@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Archive
-        uses: tavareshugo/test-gh-actions/archive@main
+        uses: tavareshugo/test-gh-actions/course-archive@main
         with:
           pre_render: "echo 'Optional pre-render commands'"
           post_render: "echo 'Optional post-render commands'"
@@ -22,7 +22,7 @@ jobs:
     needs: archive
     steps:
       - name: Deploy
-        uses: tavareshugo/test-gh-actions/deploy@main
+        uses: tavareshugo/test-gh-actions/course-deploy@main
         with:
           pre_render: "echo 'Optional pre-render commands'"
           post_render: "echo 'Optional post-render commands'"
