@@ -19,6 +19,14 @@ jobs:
       - name: Update extensions
         uses: tavareshugo/test-gh-actions/course-extensions-update@main
 
+      - name: Debug token / actor (optional)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "GITHUB_ACTOR=${GITHUB_ACTOR}"
+          curl -sS -H "Authorization: token ${GH_TOKEN}" https://api.github.com/repos/${{ github.repository }} | jq '{full_name,permissions:.permissions}' || true
+        shell: bash
+
       - name: Create or update PR
         uses: peter-evans/create-pull-request@v4
         with:
