@@ -13,6 +13,9 @@ project:
 
 format: crit-format-html
 
+filters: 
+  - callout-exercise
+
 execute:
   freeze: auto
 

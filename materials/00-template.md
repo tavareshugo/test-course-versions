@@ -15,7 +15,11 @@ Headings for material sections start at level 2.
 
 More guidelines for content available here: https://cambiotraining.github.io/quarto-course-template/materials/02-content_guidelines.html
 
-test 
+:::{.callout-exercise}
+
+Testing exercise
+
+:::
 
 ## Summary
 
