@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update extensions
-        uses: tavareshugo/crit-gh-actions/course-extensions-update@main
+        uses: tavareshugo/test-gh-actions/course-extensions-update@main
 
       - name: Create or update PR
         uses: peter-evans/create-pull-request@v4
