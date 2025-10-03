@@ -1,4 +1,5 @@
-title: Course Page Format
+title: Citation CFF Parser
+description: A shortcode to create author lists and citations from CFF files.
 author: Cambridge Research Informatics Training
 version: 1.0.0
 contributes:
